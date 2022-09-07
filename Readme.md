@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов (простой)»
 
 * Студент: [Pavel Sevostyanov](https://up.htmlacademy.ru/nodejs-api/2/user/991145).
-* Наставник: `Неизвестно`.
+* Наставник: [Владислав Поклонский](https://htmlacademy.ru/profile/id2210683).
 
 ---
 
