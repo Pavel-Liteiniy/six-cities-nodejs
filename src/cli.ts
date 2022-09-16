@@ -1,12 +1,21 @@
 #!/usr/bin/env node
 
-import VersionCommand from './cli-command/version-command.js';
-import HelpCommand from './cli-command/help-command.js';
-import CLIApplication from './app/cli-application.js';
-import ImportCommand from './cli-command/import-command.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
+import CLIApplication from './app/cli-application.js';
+import ModuleLoader from './common/module-loader/module-loader.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const myLoader = new ModuleLoader();
 const myManager = new CLIApplication();
-myManager.registerCommands([
-  new HelpCommand, new VersionCommand, new ImportCommand
-]);
-myManager.processCommand(process.argv);
+
+async function runManager() {
+  const cliCommands = await myLoader.loadModulesFromDirectory(`${__dirname}/cli-command`);
+  myManager.registerCommands(cliCommands.map((CliCommand) => new CliCommand));
+  myManager.processCommand(process.argv);
+}
+
+runManager();

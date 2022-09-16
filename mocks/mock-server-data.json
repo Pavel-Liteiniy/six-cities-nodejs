@@ -1,0 +1,72 @@
+{
+  "api": {
+    "title": [
+      "Классная Квартира",
+      "Нормальный дом",
+      "Типичная хата",
+      "Бунгало как Бунгало",
+      "Коробка от холодильника"
+    ],
+    "description": [
+      "Добро пожаловать в описание!",
+      "Милости просим в описание!",
+      "Заходите в описание!",
+      "Уважьте визитом в описание!",
+      "Ждем вас в описании!"
+    ],
+    "cityName": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "previewImage": [
+      "city-Paris.jpg",
+      "city-Cologne.jpg",
+      "city-Brussels.jpg",
+      "city-Amsterdam.jpg",
+      "city-Hamburg.jpg",
+      "city-Dusseldorf.jpg"
+    ],
+    "photos": [
+      "city-Paris-1.jpg;city-Paris-2.jpg;city-Paris-3.jpg;city-Paris-4.jpg;city-Paris-5.jpg;city-Paris-6.jpg",
+      "city-Cologne-1.jpg;city-Cologne-2.jpg;city-Cologne-3.jpg;city-Cologne-4.jpg;city-Cologne-5.jpg;city-Cologne-6.jpg",
+      "city-Brussels-1.jpg;city-Brussels-2.jpg;city-Brussels-3.jpg;city-Brussels-4.jpg;city-Brussels-5.jpg;city-Brussels-6.jpg",
+      "city-Amsterdam-1.jpg;city-Amsterdam-2.jpg;city-Amsterdam-3.jpg;city-Amsterdam-4.jpg;city-Amsterdam-5.jpg;city-Amsterdam-6.jpg",
+      "city-Hamburg-1.jpg;city-Hamburg-2.jpg;city-Hamburg-3.jpg;city-Hamburg-4.jpg;city-Hamburg-5.jpg;city-Hamburg-6.jpg",
+      "city-Dusseldorf-1.jpg;city-Dusseldorf-2.jpg;city-Dusseldorf-3.jpg;city-Dusseldorf-4.jpg;city-Dusseldorf-5.jpg;city-Dusseldorf-6.jpg"
+    ],
+    "type": [
+      "apartment",
+      "house",
+      "room",
+      "hotel"
+    ],
+    "features": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "author": [
+      "oldmen42_user_id",
+      "newguy007_user_id",
+      "misterwho_user_id",
+      "incognito_user_id",
+      "man_user_id"
+    ],
+    "coordinates": [
+      "48.85661;2.351499",
+      "50.938361;6.959974",
+      "50.846557;4.351697",
+      "52.370216;4.895168",
+      "53.550341;10.000654",
+      "51.225402;6.776314"
+    ]
+  }
+}

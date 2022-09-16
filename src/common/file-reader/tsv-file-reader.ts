@@ -1,71 +1,35 @@
-import { readFileSync } from 'fs';
-
-import {CityName} from '../../types/city.type.js';
-import {
-  Offer,
-  OfferType,
-  OfferPhotos,
-  OfferRating,
-  OfferRooms,
-  OfferGuests,
-  OfferFeature,
-  Coordinates,
-} from '../../types/offer.type.js';
+import EventEmitter from 'events';
+import { createReadStream } from 'fs';
 
 import { FileReaderInterface } from './file-reader.interface.js';
 
-export default class TSVFileReader implements FileReaderInterface {
-  private rawData = '';
-
-  constructor(public filename: string) { }
-
-  public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf8' });
+export default class TSVFileReader extends EventEmitter implements FileReaderInterface {
+  constructor(public filename: string) {
+    super();
   }
 
-  public toArray(): Offer[] {
-    if (!this.rawData) {
-      return [];
+  public async read():Promise<void> {
+    const stream = createReadStream(this.filename, {
+      highWaterMark: 16384, // 16KB
+      encoding: 'utf-8',
+    });
+
+    let lineRead = '';
+    let endLinePosition = -1;
+    let importedRowCount = 0;
+
+    for await (const chunk of stream) {
+      lineRead += chunk.toString();
+
+      while ((endLinePosition = lineRead.indexOf('\n')) >= 0) {
+        const completeRow = lineRead.slice(0, endLinePosition + 1);
+        lineRead = lineRead.slice(++endLinePosition);
+        importedRowCount++;
+
+        this.emit('line', completeRow);
+      }
     }
 
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim() !== '')
-      .map((line) => line.split(/\s\s|\t/))
-      .map(([
-        title,
-        description,
-        postDate,
-        cityName,
-        previewImage,
-        photos,
-        isPremium,
-        rating,
-        type,
-        rooms,
-        guests,
-        price,
-        features,
-        author,
-        commentsCount,
-        coordinates,
-      ]): Offer => ({
-        title,
-        description,
-        postDate: new Date(postDate),
-        cityName: cityName as CityName,
-        previewImage,
-        photos: photos.split(';') as OfferPhotos,
-        isPremium: Boolean(isPremium),
-        rating: Number(rating) as OfferRating,
-        type: type as OfferType,
-        rooms: Number(rooms) as OfferRooms,
-        guests: Number(guests) as OfferGuests,
-        price: Number(price),
-        features: features.split(';') as OfferFeature[],
-        author,
-        commentsCount: Number(commentsCount),
-        coordinates: coordinates.split(';').map(Number) as Coordinates,
-      }));
+    this.emit('end', importedRowCount);
   }
 }
