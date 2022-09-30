@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import {CityName} from '../types/city.type.js';
 import {
   Offer,
@@ -52,3 +54,8 @@ export const createOffer = (row: string): Offer => {
 
 export const getErrorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : '';
+
+export const createSHA256 = (line: string, salt: string): string => {
+  const shaHasher = crypto.createHmac('sha256', salt);
+  return shaHasher.update(line).digest('hex');
+};

@@ -1,25 +1,52 @@
-import {CityName} from './city.type.js';
-import {UserId} from './user.type.js';
+import {Ref} from '@typegoose/typegoose';
 
-export enum OfferType {
-  Apartment = 'apartment',
-  House = 'house',
-  Room = 'room',
-  Hotel = 'hotel',
+import { UserEntity } from '../modules/user/user.entity';
+
+export enum CityName {
+  Paris = 'Paris',
+  Cologne = 'Cologne',
+  Brussels = 'Brussels',
+  Amsterdam = 'Amsterdam',
+  Hamburg = 'Hamburg',
+  Dusseldorf = 'Dusseldorf',
 }
+export type OfferLocation = keyof typeof CityName;
 
-export type OfferPhotos = [string, string, string, string, string, string];
-export type OfferRating = 1 | 2 | 3 | 4 | 5;
+export enum Placement {
+  apartment = 'apartment',
+  house = 'house',
+  room = 'room',
+  hotel = 'hotel',
+}
+export type OfferType = keyof typeof Placement;
+
+
+type PhotoPath = string;
+export type OfferPhotos = [PhotoPath, PhotoPath, PhotoPath, PhotoPath, PhotoPath, PhotoPath];
+export type OfferRating = number;
 export type OfferRooms = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 export type OfferGuests = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-export type OfferFeature = 'Breakfast' | 'Air conditioning' | 'Laptop friendly workspace' | 'Baby seat' | 'Washer' | 'Towels' | 'Fridge';
-export type Coordinates = [number, number];
+
+export enum Feature {
+  Breakfast = 'Breakfast',
+  'Air conditioning' = 'Air conditioning',
+  'Laptop friendly workspace' = 'Air conditioning',
+  'Baby seat' = 'Air conditioning',
+  Washer = 'Washer',
+  Towels = 'Towels',
+  Fridge = 'Fridge',
+}
+export type OfferFeature = keyof typeof Feature;
+
+type latitude = number;
+type longitude = number;
+export type OfferCoordinates = [latitude, longitude];
 
 export type Offer = {
   title: string;
   description: string;
   postDate: Date;
-  cityName: CityName;
+  cityName: OfferLocation;
   previewImage: string;
   photos: OfferPhotos;
   isPremium: boolean;
@@ -29,7 +56,7 @@ export type Offer = {
   guests: OfferGuests;
   price: number;
   features: OfferFeature[];
-  author: UserId;
+  author: Ref<UserEntity>;
   commentsCount: number;
-  coordinates: Coordinates;
+  coordinates: OfferCoordinates;
 };
