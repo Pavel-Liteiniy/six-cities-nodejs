@@ -1,10 +1,9 @@
-export type UserId = string;
+export type UserLevel = 'standard' | 'pro';
 
 export type User = {
-  id: UserId;
   name: string;
   email: string;
-  avatarPath: string;
+  avatarPath?: string;
   password: string;
-  type: 'standard' | 'pro';
+  type: UserLevel;
 }
