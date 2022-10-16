@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 
-import {CityName} from '../types/city.type.js';
 import {
   Offer,
   OfferType,
@@ -9,7 +8,8 @@ import {
   OfferRooms,
   OfferGuests,
   OfferFeature,
-  Coordinates,
+  OfferCoordinates,
+  OfferLocation,
 } from '../types/offer.type.js';
 
 export const createOffer = (row: string): Offer => {
@@ -36,7 +36,7 @@ export const createOffer = (row: string): Offer => {
     title,
     description,
     postDate: new Date(postDate),
-    cityName: cityName as CityName,
+    cityName: cityName as OfferLocation,
     previewImage,
     photos: photos.split(';') as OfferPhotos,
     isPremium: Boolean(isPremium),
@@ -48,7 +48,7 @@ export const createOffer = (row: string): Offer => {
     features: features.split(';') as OfferFeature[],
     author,
     commentsCount: Number(commentsCount),
-    coordinates: coordinates.split(';').map(Number) as Coordinates,
+    coordinates: coordinates.split(';').map(Number) as OfferCoordinates,
   };
 };
 
@@ -59,3 +59,5 @@ export const createSHA256 = (line: string, salt: string): string => {
   const shaHasher = crypto.createHmac('sha256', salt);
   return shaHasher.update(line).digest('hex');
 };
+
+export const isNil = (value: unknown): value is null | undefined => (value === null || value === undefined);

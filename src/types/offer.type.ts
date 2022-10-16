@@ -1,7 +1,3 @@
-import {Ref} from '@typegoose/typegoose';
-
-import { UserEntity } from '../modules/user/user.entity';
-
 export enum CityName {
   Paris = 'Paris',
   Cologne = 'Cologne',
@@ -56,7 +52,7 @@ export type Offer = {
   guests: OfferGuests;
   price: number;
   features: OfferFeature[];
-  author: Ref<UserEntity>;
+  author: string;
   commentsCount: number;
   coordinates: OfferCoordinates;
 };

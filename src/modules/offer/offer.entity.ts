@@ -1,7 +1,10 @@
 import typegoose, {defaultClasses, getModelForClass, Ref} from '@typegoose/typegoose';
+
 import isURL from 'validator/lib/isURL.js';
 import isDecimal from 'validator/lib/isDecimal.js';
 import isLatLong from 'validator/lib/isLatLong.js';
+
+import { isNil } from '../../utils/common.js';
 
 import {
   Offer,
@@ -47,7 +50,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     this.guests = data.guests;
     this.price = data.price;
     this.features = data.features;
-    this.author = data.author;
+    this.author = data.author as unknown as Ref<UserEntity>;
     this.commentsCount = data.commentsCount;
     this.coordinates = data.coordinates;
   }
@@ -64,7 +67,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({
     required: true,
     validate: {
-      validator: (cityName: OfferLocation) => CityName[cityName] !== undefined,
+      validator: (cityName: OfferLocation) => !isNil(CityName[cityName]),
       message: 'incorrect city name format',
     }
   })
@@ -108,7 +111,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({
     required: true,
     validate: {
-      validator: (placement: OfferType) => Placement[placement] !== undefined,
+      validator: (placement: OfferType) => !isNil(Placement[placement]),
       message: 'incorrect offer type',
     }
   })
@@ -126,7 +129,11 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({
     required: true,
     validate: {
-      validator: (features: OfferFeature[]) => features.every((feature) => Feature[feature] !== undefined),
+      validator: (features: OfferFeature[]) => features.every((feature) => {
+        console.log('feature -->', feature);
+
+        return !isNil(Feature[feature]);
+      }),
       message: 'incorrect features',
     }
   })

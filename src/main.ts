@@ -15,10 +15,6 @@ import {UserServiceInterface} from './modules/user/user-service.interface.js';
 import UserService from './modules/user/user.service.js';
 import {UserEntity, UserModel} from './modules/user/user.entity.js';
 
-import {CategoryServiceInterface} from './modules/category/category-service.interface.js';
-import CategoryService from './modules/category/category.service.js';
-import {CategoryEntity, CategoryModel} from './modules/category/category.entity.js';
-
 import {OfferServiceInterface} from './modules/offer/offer-service.interface.js';
 import OfferService from './modules/offer/offer.service.js';
 import {OfferEntity, OfferModel} from './modules/offer/offer.entity.js';
@@ -35,8 +31,6 @@ applicationContainer.bind<ConfigInterface>(Component.ConfigInterface).to(ConfigS
 applicationContainer.bind<DatabaseInterface>(Component.DatabaseInterface).to(DatabaseService).inSingletonScope();
 applicationContainer.bind<UserServiceInterface>(Component.UserServiceInterface).to(UserService);
 applicationContainer.bind<types.ModelType<UserEntity>>(Component.UserModel).toConstantValue(UserModel);
-applicationContainer.bind<CategoryServiceInterface>(Component.CategoryServiceInterface).to(CategoryService);
-applicationContainer.bind<types.ModelType<CategoryEntity>>(Component.CategoryModel).toConstantValue(CategoryModel);
 applicationContainer.bind<OfferServiceInterface>(Component.OfferServiceInterface).to(OfferService);
 applicationContainer.bind<types.ModelType<OfferEntity>>(Component.OfferModel).toConstantValue(OfferModel);
 

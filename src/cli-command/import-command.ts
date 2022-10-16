@@ -16,27 +16,25 @@ import {UserServiceInterface} from '../modules/user/user-service.interface.js';
 import UserService from '../modules/user/user.service.js';
 import {UserModel} from '../modules/user/user.entity.js';
 
-import {CategoryServiceInterface} from '../modules/category/category-service.interface.js';
-import CategoryService from '../modules/category/category.service.js';
-import {CategoryModel} from '../modules/category/category.entity.js';
-
 import {OfferServiceInterface} from '../modules/offer/offer-service.interface.js';
 import OfferService from '../modules/offer/offer.service.js';
 import {OfferModel} from '../modules/offer/offer.entity.js';
 import {Offer} from '../types/offer.type.js';
 
+import {isNil} from '../utils/common.js';
 
-const DEFAULT_DB_PORT = 27017;
-const DEFAULT_USER_PASSWORD = '123456';
+const DEFAULT_DB_USERNAME = process.env.DB_USER ?? 'admin';
+const DEFAULT_DB_PASSWORD = process.env.DB_PASSWORD ?? 'test';
+const DEFAULT_DB_HOST = process.env.DB_HOST ?? 'localhost';
+const DEFAULT_DB_PORT = process.env.DB_PORT ?? '27017';
+const DEFAULT_DB_DBNAME = process.env.DB_NAME ?? 'dbname';
 
 export default class ImportCommand implements CliCommandInterface {
   public readonly name = '--import';
   private userService!: UserServiceInterface;
-  private categoryService!: CategoryServiceInterface;
   private offerService!: OfferServiceInterface;
   private databaseService!: DatabaseInterface;
   private logger: LoggerInterface;
-  private salt!: string;
 
   constructor() {
     this.onLine = this.onLine.bind(this);
@@ -44,27 +42,21 @@ export default class ImportCommand implements CliCommandInterface {
 
     this.logger = new ConsoleLoggerService();
     this.offerService = new OfferService(this.logger, OfferModel);
-    this.categoryService = new CategoryService(this.logger, CategoryModel);
     this.userService = new UserService(this.logger, UserModel);
     this.databaseService = new DatabaseService(this.logger);
   }
 
   private async saveOffer(offer: Offer) {
-    const categories = [];
-    const user = await this.userService.findOrCreate({
-      ...offer.user,
-      password: DEFAULT_USER_PASSWORD
-    }, this.salt);
+    const author = await this.userService.findById(offer.author);
 
-    for (const {name} of offer.categories) {
-      const existCategory = await this.categoryService.findByCategoryNameOrCreate(name, {name});
-      categories.push(existCategory.id);
+    if (isNil(author)) {
+      this.logger.warn('Can\'t save offer - author does not exist');
+      return;
     }
 
     await this.offerService.create({
       ...offer,
-      categories,
-      userId: user.id,
+      author: author.id,
     });
   }
 
@@ -79,9 +71,21 @@ export default class ImportCommand implements CliCommandInterface {
     this.databaseService.disconnect();
   }
 
-  public async execute(filename: string, login: string, password: string, host: string, dbname: string, salt: string): Promise<void> {
-    const uri = getURI(login, password, host, DEFAULT_DB_PORT, dbname);
-    this.salt = salt;
+  public async execute(
+    filename: string,
+    username: string = DEFAULT_DB_USERNAME,
+    password: string = DEFAULT_DB_PASSWORD,
+    host: string = DEFAULT_DB_HOST,
+    port: string = DEFAULT_DB_PORT,
+    dbname: string = DEFAULT_DB_DBNAME
+  ): Promise<void> {
+    const uri = getURI(
+      username,
+      password,
+      host,
+      Number(port),
+      dbname
+    );
 
     await this.databaseService.connect(uri);
 
